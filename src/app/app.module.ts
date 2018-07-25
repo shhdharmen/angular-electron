@@ -19,6 +19,9 @@ import { WebviewDirective } from './directives/webview.directive';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
+import { MyOwnCustomFontAwesomeModule } from './my-own-custom-font-awesome/my-own-custom-font-awesome.module';
+import { MyOwnCustomMaterialModule } from './my-own-custom-material/my-own-custom-material.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -36,6 +39,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
+    MyOwnCustomFontAwesomeModule,
+    MyOwnCustomMaterialModule,
+    NgbModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
