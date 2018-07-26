@@ -1,15 +1,32 @@
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <span>Angular N-CLI</span>
-  </mat-toolbar-row>
-</mat-toolbar>
+<header>
+  <mat-toolbar color="primary">Angular UX</mat-toolbar>
+</header>
+
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-md-6 my-3">
-      <mat-card>Simple card<fa-icon icon="coffee"></fa-icon></mat-card>
-    </div>
-    <div class="col-md-6 my-3">
-      <mat-card>Simple card<fa-icon icon="coffee"></fa-icon></mat-card>
-    </div>
+  <div class="row mt-3">
+    <mat-card class="w-100">
+      <form [formGroup]="fileForm">
+        <div class="form-group">
+          <label for="folderPath">Project Folder Path</label>
+          <input type="email" class="form-control" id="folderPath" aria-describedby="folderPath" placeholder="Path/to/your/project"
+            formControlName="folderPath">
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Upload</span>
+          </div>
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="appFile" (change)="readFile($event.target.files[0])" formControlName="appFile">
+            <label class="custom-file-label" for="appFile">{{file ? file.name : 'Choose File'}}</label>
+          </div>
+        </div>
+        <div class="w-100 text-center">
+          <!-- {{FileText}} -->
+          <button mat-raised-button type="submit" color="accent" class="text-uppercase font-weight-bold">Start</button>
+        </div>
+      </form>
+    </mat-card>
   </div>
 </div>
+
+<footer></footer>
