@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
   }
 
   processFile(text: string) {
+    console.log('file', text);
     const lines = text.split('\n');
     console.log(lines);
     const noOfLines = lines.length;
@@ -38,6 +39,11 @@ export class HomeComponent implements OnInit {
       return flag;
     });
     console.log(imports);
+    const className = lines.filter(line => {
+      const flag = line.search(/^(export class)/) > -1;
+      return flag;
+    })[0].split(' ')[2];
+    console.log(className);
   }
 
 }
