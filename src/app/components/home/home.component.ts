@@ -17,8 +17,9 @@ export class HomeComponent implements OnInit {
   childNodes: INode[] = [];
   constructor(private fb: FormBuilder) {
     this.childNodesChannel.asObservable().subscribe(next => {
-      this.childNodes.push(next);
-      console.log(this.childNodes);
+      if (next) {
+        this.childNodes.push(next);
+      }
     });
   }
 
@@ -82,15 +83,22 @@ export class HomeComponent implements OnInit {
   }
 
   getImports(lines: string[]): INode[] {
-    // return lines.filter(line => {
-    //   const flag = line.search(/^(import)/) > -1;
-    //   return flag;
-    // });
-    return [];
+    const imports = lines.filter(line => {
+      const flag = line.search(/^(import)/) > -1;
+      return flag;
+    });
+    const importNodes: INode[] = this.processImports(imports);
+    return importNodes;
   }
 
   getDeclarations(lines: string[]): INode[] { return []; }
   getProviders(lines: string[]): INode[] { return []; }
   getBootstrap(lines: string[]): INode[] { return []; }
+
+  processImports(imports: string[]): INode[] {
+    imports.forEach(element => {
+
+    });
+  }
 
 }
