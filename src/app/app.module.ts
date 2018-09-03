@@ -21,7 +21,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { MyOwnCustomFontAwesomeModule } from './my-own-custom-font-awesome/my-own-custom-font-awesome.module';
 import { MyOwnCustomMaterialModule } from './my-own-custom-material/my-own-custom-material.module';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NodeBadgeComponent } from './components/home/node-badge/node-badge.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -32,7 +32,8 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     HomeComponent,
-    WebviewDirective
+    WebviewDirective,
+    NodeBadgeComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +44,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     MyOwnCustomMaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

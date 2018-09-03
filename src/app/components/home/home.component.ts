@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { INode, ENodeType } from '../../models/node';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -13,12 +13,12 @@ export class HomeComponent implements OnInit {
   title = 'aux';
   file: File;
   fileText: any;
-  childNodesChannel: BehaviorSubject<INode> = new BehaviorSubject(null);
-  childNodes: INode[] = [];
+  nodesChannel: BehaviorSubject<INode> = new BehaviorSubject(null);
+  nodes: INode[] = [];
   constructor(private fb: FormBuilder) {
-    this.childNodesChannel.asObservable().subscribe(next => {
+    this.nodesChannel.asObservable().subscribe(next => {
       if (next) {
-        this.childNodes.push(next);
+        this.nodes.push(next);
       }
     });
   }
@@ -42,10 +42,10 @@ export class HomeComponent implements OnInit {
   processFile(text: string, file: File) {
     console.log('file', text);
     const lines = text.split('\n');
-    this.getNode(file.name, file.path, lines);
+    this.getNode(file.name, file.path, lines, text, this.nodesChannel);
   }
 
-  getNode(fileName: string, filePath: string, lines: string[]) {
+  getNode(fileName: string, filePath: string, lines: string[], text: string, dynSubject: BehaviorSubject<INode>) {
     const node: INode = {
       bootstrap: [],
       className: '',
@@ -60,11 +60,15 @@ export class HomeComponent implements OnInit {
     node.className = this.getClassName(lines);
     node.fileName = fileName;
     node.path = filePath;
-    node.declarations = this.getDeclarations(lines);
+    this.getDeclarations(text).subscribe((declaration: INode) => {
+      if (declaration) {
+        node.declarations.push(declaration);
+      }
+    });
     node.imports = this.getImports(lines);
     node.providers = this.getProviders(lines);
     node.bootstrap = this.getBootstrap(lines);
-    this.childNodesChannel.next(node);
+    dynSubject.next(node);
   }
 
   getNodeType(lines: string[]): ENodeType {
@@ -91,14 +95,31 @@ export class HomeComponent implements OnInit {
     return importNodes;
   }
 
-  getDeclarations(lines: string[]): INode[] { return []; }
+  getDeclarations(text: string): Observable<INode> {
+    const declarationSubject = new BehaviorSubject<INode>(null);
+    text = text.replace(/\r?\n|\r/g, '').split(' ').join('');
+    const declarationStartedAt = text.indexOf('declarations:[');
+    const declarationEndedAt = text.indexOf(']', declarationStartedAt);
+    const allDeclarationCsV = text.substring(declarationStartedAt + 14, declarationEndedAt);
+    const allDeclarations = allDeclarationCsV.split(',');
+    allDeclarations.forEach(declaration => {
+      const tempNode: INode = {
+        bootstrap: [],
+        className: declaration,
+        declarations: [],
+        fileName: '',
+        imports: [],
+        path: '',
+        providers: [],
+        type: ENodeType.unknown
+      };
+      declarationSubject.next(tempNode);
+    });
+    return declarationSubject;
+  }
   getProviders(lines: string[]): INode[] { return []; }
   getBootstrap(lines: string[]): INode[] { return []; }
 
-  processImports(imports: string[]): INode[] {
-    imports.forEach(element => {
-
-    });
-  }
+  processImports(imports: string[]): INode[] { return []; }
 
 }

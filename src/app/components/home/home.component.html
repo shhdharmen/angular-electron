@@ -27,7 +27,22 @@
     </mat-card>
   </div>
   <div class="row mt-3 justify-content-center">
-    <mat-card *ngFor="let child of childNodes">{{child.className}}</mat-card>
+    <div class="col-auto" *ngFor="let node of nodes">
+      <div class="card rounded-0">
+        <div class="card-body">
+          <div class="card-title border-bottom">
+            <app-node-badge [nodeType]="node.type"></app-node-badge>{{node.className}}
+          </div>
+          <div class="card-text">
+            <ul class="list-group">
+              <li class="list-group-item" *ngFor="let declaration of node.declarations">
+                {{declaration.className}}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
